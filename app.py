@@ -2,25 +2,27 @@ from flask import Flask, render_template
 import os
 import random
 import sqlite3
-
+from time import sleep
 
 def initializeTable(conn: sqlite3.Connection):
-    cursor = conn.cursor()
-    cursor.execute("""select name from sqlite_master
-                   where type='table' and name='counter'""")
-    
-    if cursor.fetchone() == None:
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS counter (
-            id INTEGER PRIMARY KEY,
-            count INTEGER
-        )
-        """)
-        cursor.execute("insert into counter values (0,0 )")
-        conn.commit()
-        print("table \'counter\' created")
-    else:
-        print("db already initialized!")
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""select name from sqlite_master
+                    where type='table' and name='counter'""")
+        if cursor.fetchone() == None:
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS counter (
+                id INTEGER PRIMARY KEY,
+                count INTEGER
+            )
+            """)
+            cursor.execute("insert into counter values (0,0 )")
+            conn.commit()
+            print("table \'counter\' created")
+        else:
+            print("db already initialized!")
+    except:
+        print("db already initialized")
 
 def incrementCountandReturn(conn: sqlite3.Connection):
     cursor = conn.cursor()
@@ -35,6 +37,7 @@ def incrementCountandReturn(conn: sqlite3.Connection):
 
 
 def createApp():
+    sleep(random.randint(1, 1000) / 999)#just for fun
     conn = sqlite3.connect("mlemdata.db")
     initializeTable(conn)
     conn.close()
