@@ -11,10 +11,10 @@ def initializeTable(conn: sqlite3.Connection):
     
     if cursor.fetchone() == None:
         cursor.execute("""
-            CREATE TABLE counter (
-                id INTEGER PRIMARY KEY,
-                count INTEGER
-            )
+            CREATE TABLE IF NOT EXISTS counter (
+            id INTEGER PRIMARY KEY,
+            count INTEGER
+        )
         """)
         cursor.execute("insert into counter values (0,0 )")
         conn.commit()
@@ -33,12 +33,15 @@ def incrementCountandReturn(conn: sqlite3.Connection):
     conn.commit()
     return current_val[1] + 1
 
-app = Flask(__name__)
 
-conn = sqlite3.connect("mlemdata.db")
-initializeTable(conn)
-conn.close()
+def createApp():
+    conn = sqlite3.connect("mlemdata.db")
+    initializeTable(conn)
+    conn.close()
+    app = Flask(__name__)
+    return app
 
+app = createApp()
 image_folder = os.path.join(app.root_path, 'static', 'images')
 image_files = os.listdir(image_folder)
 
