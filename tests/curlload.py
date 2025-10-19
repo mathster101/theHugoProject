@@ -2,10 +2,14 @@ import subprocess
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+IP_ADDR = "127.0.0.1"
+#IP_ADDR = "10.1.1.224"
+
+
 def call_curl():
     """Calls curl for the local URL."""
     result = subprocess.run(
-        ["curl", "-s", "http://10.1.1.224:5000/"], 
+        ["curl", "-s", f"http://{IP_ADDR}:5000/"], 
         capture_output=True, text=True
     )
     return result.stdout
@@ -21,5 +25,5 @@ def run_parallel_curls(n=100):
 
 if __name__ == "__main__":
     while True:
-        responses = run_parallel_curls(10)
+        responses = run_parallel_curls(5)
         #print(f"Completed {len(responses)} requests.")
