@@ -18,7 +18,7 @@ app = createApp()
 image_folder = os.path.join(app.root_path, 'static', 'images')
 image_files = os.listdir(image_folder)
 
-@app.route('/')
+@app.route('/', methods = ["GET"])
 def homePage():
     conn = sqlite3.connect(DB_NAME)
     db.logVisitTimestamp(conn)
@@ -37,11 +37,17 @@ def visitorCount():
         db.clearVisitorCount(conn)
         return '', 204
 
-@app.route('/timestamps')
+@app.route('/timestamps', methods = ["GET"])
 def getAllTimestamps():
     conn = sqlite3.connect(DB_NAME)
     rows = db.fetchAllTimestamps(conn)
     return rows
+
+@app.route('/timestamps/top/<count>', methods = ["GET"])
+def getTopTimestamps(count = 10):
+    rows = getAllTimestamps()
+    rows = sorted(rows, key = lambda x : x[1], reverse = True)
+    return rows[:int(count)], 200
 
 
 if __name__ == '__main__':

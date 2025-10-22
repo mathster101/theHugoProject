@@ -55,14 +55,15 @@ def clearVisitorCount(conn: sqlite3.Connection):
 
 def incrementVisitorCountandReturn(conn: sqlite3.Connection):
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM counter WHERE id = 0")
-    current_val = cursor.fetchone()
-    cursor.execute("""UPDATE counter 
-                   SET count = ?
-                   WHERE id = 0""",
-                   ((current_val[1] + 1 ),))
+    cursor.execute("""
+        UPDATE counter
+        SET count = count + 1
+        WHERE id = 0
+    """)
     conn.commit()
-    return current_val[1] + 1
+    cursor.execute("SELECT count FROM counter WHERE id = 0")
+    return cursor.fetchone()[0]
+
 
 def logVisitTimestamp(conn: sqlite3.Connection):
     cursor = conn.cursor()
