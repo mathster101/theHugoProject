@@ -42,6 +42,17 @@ def initializeTimestampTable(conn: sqlite3.Connection):
     except:
         print("timestamp db already initialized")
 
+def getVisitorCount(conn: sqlite3.Connection):
+    cursor = conn.cursor()
+    cursor.execute("SELECT count FROM counter where id = 0")
+    current_val = cursor.fetchone()
+    return int(current_val[0])
+
+def clearVisitorCount(conn: sqlite3.Connection):
+    cursor = conn.cursor()
+    cursor.execute("UPDATE counter SET count = ? WHERE id = 0", (0,))
+    conn.commit()
+
 def incrementVisitorCountandReturn(conn: sqlite3.Connection):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM counter WHERE id = 0")

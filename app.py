@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 import os
 import random
 import sqlite3
@@ -27,6 +27,15 @@ def homePage():
     visitor_number = db.incrementVisitorCountandReturn(conn)
     conn.close()
     return render_template('homepage.html', name = random_string, image_file = image_file, visitor_number = visitor_number)
+
+@app.route('/visitorCount', methods = ["GET", "DELETE"])
+def visitorCount():
+    conn = sqlite3.connect(DB_NAME)
+    if request.method == "GET":
+        return jsonify({'visitorCount' : db.getVisitorCount(conn)}), 200
+    if request.method == "DELETE":
+        db.clearVisitorCount(conn)
+        return '', 204
 
 @app.route('/timestamps')
 def getAllTimestamps():
