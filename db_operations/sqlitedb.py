@@ -1,7 +1,8 @@
 import sqlite3
 from time import time
+from db_operations.dbOperations import DBOperations
 
-class SQLiteDB:
+class SQLiteDB(DBOperations):
     def __init__(self, dbName):
         self.dbName = dbName
         self.initializeCounterTable()
@@ -91,5 +92,6 @@ class SQLiteDB:
             cursor = conn.cursor()
             cursor.execute("SELECT unix_time, count FROM timestamp")
             result = cursor.fetchall()
+            print(result)
             return result
         return

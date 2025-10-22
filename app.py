@@ -5,38 +5,48 @@ import sqlite3
 from time import sleep, time 
 import db_operations.database_operations as db
 import db_operations.sqlitedb as sqlitedb
+import db_operations.redisdb as redisdb
 
-DB_NAME = "mlemdata.db"
+#DB_TYPE = "SQLite"
+DB_TYPE = "Redis"
+DB_NAME_SQLite = "mlemdata.db"
+
+
 
 def createApp():
     sleep(random.randint(1, 2000) / 999)#just for fun
-    sqliteDB = sqlitedb.SQLiteDB(DB_NAME)
+    if DB_TYPE ==  "SQLite":
+        database = sqlitedb.SQLiteDB(DB_NAME_SQLite)
+    elif DB_TYPE == "Redis":
+        database = redisdb.RedisDB()
+    else:
+        database = None
     app = Flask(__name__)
-    return app, sqliteDB
+    return app, database
 
-app, sqliteDB = createApp()
+app, database = createApp()
 image_folder = os.path.join(app.root_path, 'static', 'images')
 image_files = os.listdir(image_folder)
 
 @app.route('/', methods = ["GET"])
 def homePage():
-    sqliteDB.logVisitTimestamp()
+    database.logVisitTimestamp()
     random_string = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
     image_file = random.choice(image_files)
-    visitor_number = sqliteDB.incrementVisitorCountandReturn()
+    visitor_number = database.incrementVisitorCountandReturn()
     return render_template('homepage.html', name = random_string, image_file = image_file, visitor_number = visitor_number)
 
 @app.route('/visitorCount', methods = ["GET", "DELETE"])
 def visitorCount():
     if request.method == "GET":
-        return jsonify({'visitorCount' : sqliteDB.getVisitorCount()}), 200
+        return jsonify({'visitorCount' : database.getVisitorCount()}), 200
     if request.method == "DELETE":
-        sqliteDB.clearVisitorCount()
+        database.clearVisitorCount()
         return '', 204
 
 @app.route('/timestamps', methods = ["GET"])
 def getAllTimestamps():
-    rows = sqliteDB.fetchAllTimestamps()
+    rows = database.fetchAllTimestamps()
     return rows
 
 @app.route('/timestamps/top/<count>', methods = ["GET"])
