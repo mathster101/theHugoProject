@@ -30,10 +30,9 @@ image_files = os.listdir(image_folder)
 @app.route('/', methods = ["GET"])
 def homePage():
     database.logVisitTimestamp()
-    random_string = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
     image_file = random.choice(image_files)
     visitor_number = database.incrementVisitorCountandReturn()
-    return render_template('homepage.html', name = random_string, image_file = image_file, visitor_number = visitor_number)
+    return render_template('homepage.html', image_file = image_file, visitor_number = visitor_number)
 
 @app.route('/visitorCount', methods = ["GET", "DELETE"])
 def visitorCount():
