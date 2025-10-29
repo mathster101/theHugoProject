@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import os
 import random
 import sqlite3
-from time import sleep, time 
-import db_operations.database_operations as db
+from time import sleep
 import db_operations.sqlitedb as sqlitedb
 import db_operations.redisdb as redisdb
 
@@ -14,7 +13,7 @@ DB_NAME_SQLite = "mlemdata.db"
 
 
 def createApp():
-    sleep(random.randint(1, 2000) / 999)#just for fun
+    sleep(random.randint(1, 2000) / 999)
     if DB_TYPE ==  "SQLite":
         database = sqlitedb.SQLiteDB(DB_NAME_SQLite)
     elif DB_TYPE == "Redis":
@@ -57,4 +56,4 @@ def getTopTimestamps(count = 10):
 
 
 if __name__ == '__main__':
-    app.run(debug=0, host='0.0.0.0')
+    app.run(debug=1, host='0.0.0.0')

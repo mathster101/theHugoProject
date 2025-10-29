@@ -25,5 +25,5 @@ def run_parallel_curls(n=100):
 
 if __name__ == "__main__":
     while True:
-        responses = run_parallel_curls(5)
+        responses = run_parallel_curls(100000)
         #print(f"Completed {len(responses)} requests.")

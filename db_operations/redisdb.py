@@ -1,16 +1,19 @@
 from time import time
 import redis
 from db_operations.dbOperations import DBOperations
+import os
 
 class RedisDB(DBOperations):
     def __init__(self):
-        self.redisdb = redis.Redis(host='localhost', port=6379, db=0)
+        redis_host = os.getenv("REDIS_HOST", "localhost")
+        redis_port = int(os.getenv("REDIS_PORT", 6379))
+        self.redisdb = redis.Redis(host=redis_host, port=redis_port, db=0)
         self.redisdb.set("visitorCount", 0)
         self.redisdb.delete("timestamp_counter")
 
     def getVisitorCount(self):
         current_val = self.redisdb.get("visitorCount").decode("UTF-8")
-        return current_val
+        return int(current_val)
 
     def clearVisitorCount(self):
         self.redisdb.set("visitorCount", 0)

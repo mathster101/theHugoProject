@@ -1,1 +1,17 @@
 # theHugoProject
+rm mlemdata.db;clear;python3 app.py
+
+
+rm mlemdata.db;clear;gunicorn -w 4 -b 0.0.0.0:5000 app:app
+###################################
+
+OR
+
+####################################
+docker build -t thehugoproject .
+
+docker run -d -p 5000:5000 --name theHugoProject --cpus="2.0" thehugoproject
+
+docker stop 
+
+docker container prune
