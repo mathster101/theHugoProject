@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import os
 import random
-import sqlite3
 from time import sleep
 import db_operations.sqlitedb as sqlitedb
 import db_operations.redisdb as redisdb
@@ -9,7 +8,6 @@ import db_operations.redisdb as redisdb
 #DB_TYPE = "SQLite"
 DB_TYPE = "Redis"
 DB_NAME_SQLite = "mlemdata.db"
-
 
 
 def createApp():

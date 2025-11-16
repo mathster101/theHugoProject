@@ -8,7 +8,7 @@ class RedisDB(DBOperations):
         redis_host = os.getenv("REDIS_HOST", "localhost")
         redis_port = int(os.getenv("REDIS_PORT", 6379))
         self.redisdb = redis.Redis(host=redis_host, port=redis_port, db=0)
-        self.redisdb.set("visitorCount", 0)
+        #self.redisdb.set("visitorCount", 0)
         self.redisdb.delete("timestamp_counter")
 
     def getVisitorCount(self):

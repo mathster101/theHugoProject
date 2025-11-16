@@ -6,10 +6,10 @@ Hello Page
 
 {% block content %}
 <div class="text-center">
-    <h1 class="display-4 text-primary">Hello Visitor!</h1>
+    <h1 class="display-3 text-primary">Hello Friend!</h1>
     <p class="lead text-secondary">you are visitor number {{visitor_number}}!!!</p>
     <!-- Display image -->
     <img src="{{ url_for('static', filename='images/' + image_file) }}" alt="Dynamic Image"
-        class="img-fluid rounded mt-4" style="width: 520px; height: 320px;">
+        class="img-fluid rounded mt-4" style="width: 420px; height: 420px;">
 </div>
 {% endblock %}
